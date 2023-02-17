@@ -24,7 +24,28 @@ public class Cinema {
         }
     }
 
-    public void printCinemaLayout() {
+    public void userUI()
+    {
+        Scanner in = new Scanner(System.in);
+        int userInput = -1;
+        while(userInput != 0){
+            System.out.println("1. Show the seats");
+            System.out.println("2. Buy a ticket");
+            System.out.println("0. Exit");
+            userInput = in.nextInt();
+
+            switch (userInput){
+                case 1:
+                    printCinemaLayout();
+                    break;
+                case 2:
+                    sellTicket();
+                    break;
+            }
+        }
+    }
+
+    private void printCinemaLayout() {
         System.out.println("Cinema:");
         for (int row = 0; row < rowsCount + 1; row++){
             for (int seat = 0; seat < seatsInRowCount + 1; seat++){
@@ -63,12 +84,12 @@ public class Cinema {
         return profit;
     }
 
-    public void printProfit(){
+    private void printProfit(){
         System.out.println("Total income:");
         System.out.println("$" + Integer.toString(calculateProfit()));
     }
 
-    public int sellTicket(){
+    private int sellTicket(){
         Scanner in = new Scanner(System.in);
         System.out.println("Enter a row number:");
         int row = in.nextInt();
