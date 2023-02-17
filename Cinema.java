@@ -7,6 +7,8 @@ public class Cinema {
     private final int seatsInRowCount;
     private final int totalSeatsNumber;
     private char[][] seatsArray;
+    private int sold = 0;
+    private int currentIncome = 0;
 
 
     public Cinema() {
@@ -22,17 +24,19 @@ public class Cinema {
                 seatsArray[row][seat] = 'S';
             }
         }
+        System.out.println();
     }
 
-    public void userUI()
-    {
+    public void userUI() {
         Scanner in = new Scanner(System.in);
         int userInput = -1;
         while(userInput != 0){
             System.out.println("1. Show the seats");
             System.out.println("2. Buy a ticket");
+            System.out.println("3. Statistics");
             System.out.println("0. Exit");
             userInput = in.nextInt();
+            System.out.println();
 
             switch (userInput){
                 case 1:
@@ -40,6 +44,9 @@ public class Cinema {
                     break;
                 case 2:
                     sellTicket();
+                    break;
+                case 3:
+                    printStatistics();
                     break;
             }
         }
@@ -75,7 +82,7 @@ public class Cinema {
     }
 
 
-    private int calculateProfit(){
+    private int getTotalProfit(){
         int profit = 0;
 
         for (int row = 1; row <= rowsCount; row++){
@@ -84,21 +91,44 @@ public class Cinema {
         return profit;
     }
 
-    private void printProfit(){
-        System.out.println("Total income:");
-        System.out.println("$" + Integer.toString(calculateProfit()));
-    }
-
-    private int sellTicket(){
+    private void sellTicket() {
         Scanner in = new Scanner(System.in);
-        System.out.println("Enter a row number:");
-        int row = in.nextInt();
-        System.out.println("Enter a seat number in that row:");
-        int seat = in.nextInt();
-        seatsArray[row-1][seat-1] = 'B';
+        boolean finished = false;
 
-        int price = getSeatPrice(row);
-        System.out.println("Ticket price: $" + Integer.toString(price));
-        return price;
+        while(!finished){
+            System.out.println("Enter a row number:");
+            int row = in.nextInt();
+            System.out.println("Enter a seat number in that row:");
+            int seat = in.nextInt();
+            System.out.println();
+
+            if (row > rowsCount || seat > seatsInRowCount) {
+                System.out.println("Wrong input!");
+            } else if (seatsArray[row - 1][seat - 1] == 'B') {
+                System.out.println("That ticket has already been purchased!");
+            } else {
+                sold++;
+                seatsArray[row - 1][seat - 1] = 'B';
+                int ticketPrice = getSeatPrice(row);
+                currentIncome += ticketPrice;
+                System.out.println("Ticket price: $" + Integer.toString(ticketPrice));
+                finished = true;
+            }
+            System.out.println();
+        }
+
+
     }
+
+
+    private void printStatistics()
+    {
+        double percentageSold = 100.0 * sold / totalSeatsNumber;
+        System.out.println("Number of purchased tickets: " + Integer.toString(sold));
+        System.out.println("Percentage: " + String.format("%.2f", percentageSold) + "%");
+        System.out.println("Current income: $" + Integer.toString(currentIncome));
+        System.out.println("Total income: $" + Integer.toString(getTotalProfit()));
+        System.out.println();
+    }
+
 }
