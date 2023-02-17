@@ -3,8 +3,8 @@ package cinema;
 import java.util.Scanner;
 
 public class Cinema {
-    private int rowsCount = 0;
-    private int seatsInRowCount = 0;
+    private final int rowsCount;
+    private final int seatsInRowCount;
     private final int totalSeatsNumber;
     private char[][] seatsArray;
 
@@ -54,7 +54,6 @@ public class Cinema {
     }
 
 
-    // exercise 2 solution
     private int calculateProfit(){
         int profit = 0;
 
@@ -69,4 +68,16 @@ public class Cinema {
         System.out.println("$" + Integer.toString(calculateProfit()));
     }
 
+    public int sellTicket(){
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter a row number:");
+        int row = in.nextInt();
+        System.out.println("Enter a seat number in that row:");
+        int seat = in.nextInt();
+        seatsArray[row-1][seat-1] = 'B';
+
+        int price = getSeatPrice(row);
+        System.out.println("Ticket price: $" + Integer.toString(price));
+        return price;
+    }
 }
